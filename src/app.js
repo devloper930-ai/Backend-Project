@@ -11,7 +11,6 @@ const app = express();
 ConnectDB();
 
 const allowedOrigins = [
-  "https://project-pearl-nine-63.vercel.app/",
   "https://project-pearl-nine-63.vercel.app"
 ];
 const limiter = rateLimit({
