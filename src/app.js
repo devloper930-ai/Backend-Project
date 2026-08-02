@@ -11,7 +11,6 @@ const app = express();
 ConnectDB();
 
 const allowedOrigins = [
-  "http://localhost:5173",
   "https://full-stack-project-one-delta.vercel.app/"
 ];
 const limiter = rateLimit({
