@@ -16,7 +16,7 @@ const allowedOrigins = [
 ];
 const limiter = rateLimit({
   windowMs: 2 * 1000,
-  max: 1,
+  max: 4,
   message: {
     success: false,
     message: "Too many requests. Please try again after 5 seconds."
