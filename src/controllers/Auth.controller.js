@@ -27,6 +27,8 @@ export async function registerUser(req, res) {
 
           res.cookie("AuthToken", token, {
                httpOnly: true,
+               sameSite: "none",
+               secure: true,
                maxAge: 7 * 24 * 60 * 60 * 1000
           });
 
@@ -55,10 +57,12 @@ export async function Login(req, res) {
 
           const id = { id: user._id };
 
-          const token = await jwt.sign(id,config.JWT_SECRET, { expiresIn: '1d' });
+          const token = await jwt.sign(id, config.JWT_SECRET, { expiresIn: '1d' });
 
           res.cookie("AuthToken", token, {
                httpOnly: true,
+               sameSite: "none",
+               secure: true,
                maxAge: 7 * 24 * 60 * 60 * 1000
           });
 
