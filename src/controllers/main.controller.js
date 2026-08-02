@@ -4,6 +4,8 @@ import usermodel from "../Schema/user.model.js";
 
 export async function createpost(req, res) {
      const { title, description, image } = req.body;
+     const token = req.cookies.AuthToken;
+     console.log(token,"create post");
 
      try {
 
