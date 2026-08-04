@@ -44,7 +44,7 @@ export async function DeletePost(req, res) {
                     message: "Post not found",
                })
           }
-          const user = await usermodel.findById({_id:userId}, { posrId: 1});
+          const user = await usermodel.findById({_id:userId}, { postId: 1});
 
           console.log(userId,"userid");
           console.log(postId,"postid")
