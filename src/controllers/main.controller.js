@@ -5,7 +5,7 @@ import usermodel from "../Schema/user.model.js";
 export async function createpost(req, res) {
      const { title, description, image } = req.body;
      const token = req.cookies.AuthToken;
-     console.log(token,"create post");
+     console.log(token, "create post");
 
      try {
 
@@ -35,6 +35,17 @@ export async function DeletePost(req, res) {
                success: false,
                message: "post id and user id is required."
           })
+     }
+
+     const user = await usermodel.findOne(userId, { posrId: 1, __v: 0 });
+
+     const isPostExist = user.posts.includes(postId);
+
+     if (!isPostExist) {
+          return res.status(403).json({
+               success: false,
+               message: "You are not authorized to delete this post."
+          });
      }
 
      try {
@@ -100,7 +111,7 @@ export async function GetPost(req, res) {
      }
 
      try {
-          const post = await postmodel.findOne({_id:postId},{__v:0});
+          const post = await postmodel.findOne({ _id: postId }, { __v: 0 });
           if (!post) {
                return res.status(404).json({
                     success: false,
