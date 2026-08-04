@@ -44,7 +44,7 @@ export async function DeletePost(req, res) {
                     message: "Post not found",
                })
           }
-          const user = await usermodel.findOne(userId, { posrId: 1, __v: 0 });
+          const user = await usermodel.findById({_id:userId}, { posrId: 1, __v: 0 });
 
           const isPostExist = user.posts.includes(postId);
 
@@ -54,7 +54,7 @@ export async function DeletePost(req, res) {
                     message: "You are not authorized to delete this post."
                });
           }
-          
+
           await usermodel.findByIdAndUpdate(userId, {
                $pull: {
                     posts: post._id,
@@ -67,6 +67,7 @@ export async function DeletePost(req, res) {
           });
 
      } catch (error) {
+          console.log(error);
           return res.status(500).json({
                message: "Something went wrong.",
           });
