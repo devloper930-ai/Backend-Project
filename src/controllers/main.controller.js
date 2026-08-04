@@ -37,17 +37,6 @@ export async function DeletePost(req, res) {
           })
      }
 
-     const user = await usermodel.findOne(userId, { posrId: 1, __v: 0 });
-
-     const isPostExist = user.posts.includes(postId);
-
-     if (!isPostExist) {
-          return res.status(403).json({
-               success: false,
-               message: "You are not authorized to delete this post."
-          });
-     }
-
      try {
           const post = await postmodel.findById(postId);
           if (!post) {
@@ -55,6 +44,17 @@ export async function DeletePost(req, res) {
                     message: "Post not found",
                })
           }
+          const user = await usermodel.findOne(userId, { posrId: 1, __v: 0 });
+
+          const isPostExist = user.posts.includes(postId);
+
+          if (!isPostExist) {
+               return res.status(403).json({
+                    success: false,
+                    message: "You are not authorized to delete this post."
+               });
+          }
+          
           await usermodel.findByIdAndUpdate(userId, {
                $pull: {
                     posts: post._id,
