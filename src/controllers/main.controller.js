@@ -46,7 +46,11 @@ export async function DeletePost(req, res) {
           }
           const user = await usermodel.findById({_id:userId}, { posrId: 1});
 
+          console.log(userId,"userid");
+          console.log(postId,"postid")
+          console.log(user,"user");
           const isPostExist = user.posts.includes(postId);
+          console.log(isPostExist,"is post exist");
 
           if (!isPostExist) {
                return res.status(403).json({
