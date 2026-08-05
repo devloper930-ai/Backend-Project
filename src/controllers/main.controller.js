@@ -1,12 +1,10 @@
 import postmodel from "../Schema/post.model.js";
 import usermodel from "../Schema/user.model.js";
-
+import bcrypt from "bcrypt"
 
 export async function createpost(req, res) {
      const { title, description, image } = req.body;
-     const token = req.cookies.AuthToken;
-     console.log(token, "create post");
-
+     
      try {
 
           const user = await usermodel.findOne({ _id: req.id });
@@ -44,7 +42,7 @@ export async function DeletePost(req, res) {
                     message: "Post not found",
                })
           }
-          const user = await usermodel.findById({_id:userId}, { posts: 1});
+          const user = await usermodel.findById({ _id: userId }, { posts: 1 });
 
           const isPostExist = user.posts.includes(postId);
 
@@ -129,3 +127,46 @@ export async function GetPost(req, res) {
      }
 }
 
+export async function DeleteAccount(req, res) {
+     const { password } = req.body;
+
+     if (!password) {
+          return res.status(400).json({
+               success: false,
+               message: "password is required."
+          });
+     }
+
+     try {
+          const user = await usermodel.findById(req.id, { password: 1 });
+          if (!user) {
+               return res.status(404).json({
+                    success: false,
+                    message: "User not found."
+               });
+          }
+          const verifypassword = await bcrypt.compare(password, user.password);
+          if (!verifypassword) {
+               return res.status(401).json({
+                    success: false,
+                    message: "Invalid username or password"
+               });
+          }
+
+          await postmodel.deleteMany({
+               _id: { $in: user.posts },
+          });
+
+          // Delete user
+          await usermodel.findByIdAndDelete(req.id);
+
+          res.status(200).json({
+               success: true,
+               message: "User and all posts deleted successfully",
+          });
+
+     } catch (error) {
+          console.log(error);
+          return res.status(500).json({massege:"somthing went wrrong."})
+     }
+}

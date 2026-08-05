@@ -5,6 +5,7 @@ import config from "../config/config.js";
 
 export async function verifyToken(req, res, next) {
      const token = req.cookies.AuthToken;
+     console.log(token);
      if (!token) {
           return res.status(401).json({ massage: "unauthrized user" });
      }
